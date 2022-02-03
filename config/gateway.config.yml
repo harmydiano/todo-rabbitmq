@@ -1,0 +1,103 @@
+http:
+  hostname: localhost
+  port: 3030
+admin:
+  port: 9876
+  host: localhost
+apiEndpoints:
+  api:
+    host: localhost
+    paths: '/ip'
+  authentication:
+    host: localhost
+    paths: ['/api/v1/auth','/api/v1/auth/*']
+  user:
+    host: localhost
+    paths: ['/api/v1/docs','/api/v1/docs/*']
+  todo:
+    host: localhost
+    paths: ['/api/v1/logs','/api/v1/logs/*']
+serviceEndpoints:
+  httpbin:
+    url: 'https://httpbin.org'
+  authenticationService:
+    url: 'http://10.0.10.205:3000'
+  userService:
+    url: 'http://10.0.10.205:3001'
+  todoService:
+    url: 'http://10.0.10.205:3002'
+policies:
+  - basic-auth
+  - cors
+  - expression
+  - key-auth
+  - log
+  - oauth2
+  - proxy
+  - rate-limit
+pipelines:
+  default:
+    apiEndpoints:
+      - api
+    policies:
+    # Uncomment `key-auth:` when instructed to in the Getting Started guide.
+    # - key-auth:
+      - proxy:
+          - action:
+              serviceEndpoint: httpbin 
+              changeOrigin: true
+  authenticationEndpoints:
+    apiEndpoints:
+      - authentication
+    policies:
+      - proxy:
+        - action:
+            serviceEndpoint: authenticationService
+            ignorePath: false
+            prependPath: true
+            stripPath: true
+            changeOrigin: true
+  documentEndpoints:
+    apiEndpoints:
+      - document
+    policies:
+      - proxy:
+        - action:
+            serviceEndpoint: documentService
+            ignorePath: false
+            prependPath: true
+            stripPath: true
+            changeOrigin: true
+  logsEndpoints:
+    apiEndpoints:
+      - logs
+    policies:
+      - proxy:
+        - action:
+            serviceEndpoint: logsService
+            ignorePath: false
+            prependPath: true
+            stripPath: true
+            changeOrigin: true
+  memoEndpoints:
+    apiEndpoints:
+        - memos
+    policies:
+      - proxy:
+        - action:
+            serviceEndpoint: memoService
+            ignorePath: false
+            prependPath: true
+            stripPath: true
+            changeOrigin: true
+  auditEndpoints:
+    apiEndpoints:
+        - audits
+    policies:
+      - proxy:
+        - action:
+            serviceEndpoint: auditService
+            ignorePath: false
+            prependPath: true
+            stripPath: true
+            changeOrigin: true
