@@ -1,6 +1,7 @@
 import config from 'config';
 import nodemailer from 'nodemailer';
 import sesmail from 'nodemailer-ses-transport';
+require('dotenv').config();
 export class Mailer{
 
     static transport(){

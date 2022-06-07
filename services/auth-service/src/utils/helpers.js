@@ -8,7 +8,6 @@ import {Mailer} from '../lib/api/mailer'
 import juice from 'juice';
 import htmlToText from 'html-to-text'
 import pug from 'pug';
-import fetch from 'node-fetch';
 
 /**
  * @param {Number} size Hour count
@@ -102,7 +101,7 @@ const genereteHTML = (filename, options = {}) => {
  *  @return {Object} email object
  */
 export const sendMail = async (options) => {
-	const transport = Mailer.transport()
+	const transport = Mailer.transport();
 	const html = genereteHTML(options.filename, options);
 	const text = htmlToText.fromString(html);
 	const mailOptions = {
@@ -112,6 +111,7 @@ export const sendMail = async (options) => {
 	  html,
 	  text
 	};
+	console.log("Transport", transport);
 	return transport.sendMail(mailOptions);
   };
 
